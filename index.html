@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>A.G.P.S. - Advanced Grocery Prediction Service</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+            :root {
+                --blue-light: #11b5e4;
+                --blue-dark: #1481ba;
+                --beige: #ecc8af;
+                --brown: #7e6551;
+            }
+
+            ::-webkit-scrollbar {
+                width: 12px;
+                height: 12px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background-color: var(--beige);
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background-color: rgba(126, 101, 81, 0.75);
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background-color: rgba(126, 101, 81, 1);
+            }
+
+            body {
+                margin: 0;
+                font-family: 'Rubik', sans-serif;
+                user-select: none;
+                background-color: #f5f5f5;
+                color: #4c5667;
+            }
+
+            body * {
+                box-sizing: border-box;
+            }
+
+            header {
+                width: 100%;
+                background-color: var(--blue-dark);
+                height: 50px;
+                color: white;
+                font-size: 1.3em;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            header svg {
+                height: 50px;
+            }
+
+            #header-tabs {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                width: fit-content;
+            }
+
+            #header-tabs * {
+                margin: 0 15px;
+                cursor: pointer;
+                color: inherit;
+                text-decoration: none;
+                position: relative;
+                font-weight: bold;
+            }
+
+            #header-tabs *::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                height: 2px;
+                width: 0;
+                background-color: white;
+                transition: width 0.2s, left 0.2s;
+            }
+
+            #header-tabs *:hover::after {
+                left: 0;
+                width: 100%;
+            }
+
+            #header-tabs .selected::after {
+                left: 0;
+                width: 100%;
+            }
+
+            #profile-container {
+                background-color: white;
+                height: 40px;
+                width: fit-content;
+                margin: 5px 20px;
+                border-radius: 5px;
+                color: var(--blue-dark);
+                padding: 5px 10px;
+                font-size: 0.8em;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+            }
+
+            #profile-container img {
+                border-radius: 50%;
+                width: 25px;
+                height: 25px;
+                margin-left: 10px;
+                box-shadow: 0px 0px 5px -1px rgb(0 0 0 / 75%);
+            }
+
+            #root {
+                width: 100vw;
+                overflow-y: scroll;
+                overflow-x: hidden;
+                height: calc(100vh - 50px);
+            }
+
+            #logo-container {
+                text-align: center;
+            }
+
+            #logo {
+                width: fit-content;
+                background-color: white;
+                border: 1px solid rgba(54,64,74,.08);
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px 30px;
+                margin: 20px auto 0 auto;
+                border-radius: 5px;
+            }
+
+            #logo img {
+                max-height: 150px;
+                margin-right: 30px;
+            }
+
+            #logo span {
+                font-size: 3em;
+                font-weight: bold;
+            }
+
+            #main-container {
+                width: 100vw;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            #main {
+                padding: 10px 0;
+                margin: 0 10px;
+            }
+
+            .card {
+                padding: 20px;
+                border: 1px solid rgba(54,64,74,.08);
+                border-radius: 5px;
+                background-color: white;
+                margin: 20px 0;
+                position: relative;
+            }
+
+            .card h4 {
+                margin-top: 0;
+                color: #797979;
+            }
+
+            .card-note {
+                position: absolute;
+                right: 20px;
+                top: 20px;
+                font-size: 0.8em;
+                color: #797979;
+            }
+
+            .card p {
+                margin-bottom: 0;
+            }
+
+            #search-bar {
+                height: 2em;
+                width: 100%;
+                border: 1px solid #eee;
+                border-left: none;
+                display: flex;
+                align-items: center;
+                border-radius: 3px;
+            }
+
+            #search-bar svg {
+                height: 2em;
+                padding: 6px 10px;
+                background-color: var(--blue-dark);
+                border-radius: 3px 0 0 3px;
+                cursor: pointer;
+            }
+
+            #search-bar input {
+                outline: none;
+                border-radius: 0;
+                font-family: inherit;
+                width: 100%;
+                border: none;
+                font-size: 1em;
+                padding-left: 10px;
+            }
+
+            .chart-info h1 {
+                display: inline-block;
+                margin: 0;
+            }
+
+            .chart-info div {
+                display: inline-flex;
+                align-items: center;
+                height: 2em;
+            }
+
+            .chart-info div svg {
+                width: 25px;
+                margin: 2px;
+                fill: currentColor;
+            }
+
+            .chart-info .positive {
+                color: #196535;
+            }
+
+            .chart-info .positive svg {
+                transform: rotate(-45deg);
+            }
+
+            .chart-info .negative {
+                color: #b20f03;
+            }
+
+            .chart-info .negative svg {
+                transform: rotate(45deg);
+            }
+
+            .chart {
+                fill: url("#fill-gradient");
+                stroke: var(--brown);
+                stroke-width: 0.5%;
+                width: 100%;
+            }
+
+            #product-leaderboard {
+                min-width: 550px;
+                padding: 10px 0;
+                margin: 0 10px;
+            }
+
+            #product-leaderboard h2 {
+                margin-top: 0;
+            }
+
+            #product-leaderboard ol {
+                margin-top: 30px;
+                font-size: 1.15em;
+            }
+
+            #product-leaderboard li {
+                margin: 20px 0;
+                padding-left: 10px;
+                position: relative;
+                transition: color 0.2s;
+                cursor: pointer;
+            }
+
+            #product-leaderboard li::marker {
+                font-weight: 500;
+            }
+
+            #product-leaderboard li:hover {
+                color: var(--blue-dark);
+            }
+
+            .product-nummer {
+                color: #8d8d8d;
+                margin-left: 15px;
+                font-size: 0.8em;
+                position: absolute;
+                left: 75%;
+            }
+        </style>
+</head>
+<body>
+<header>
+<svg viewBox="0 0 320 103.504">
+ <g fill="currentColor">
+<path d="M78.024 40.645c-.015 6.128-1.51 12.189-4.38 17.576-3.002 5.635-7.37 10.386-12.81 13.89-5.89 3.797-12.777 5.822-19.766 5.917-6.888.093-13.668-1.762-19.563-5.26-5.8-3.44-10.559-8.468-13.785-14.388-3.033-5.564-4.531-11.886-4.465-18.239.03-2.883.312-5.132.935-7.862a38.712 38.712 0 0 1 1.761-5.635c.238-.6.374-.91.713-1.642a39.015 39.015 0 0 1 4.003-6.725c.372-.504.512-.681.994-1.268a39.192 39.192 0 0 1 5.516-5.485c.573-.468.737-.592 1.402-1.076a39.065 39.065 0 0 1 7.635-4.32c-.299.128.182-.073.195-.078a38.712 38.712 0 0 1 2.385-.878 37.15 37.15 0 0 1 8.244-1.749 39.31 39.31 0 0 1 7.979.08c.16.017.319.036.478.056a41.411 41.411 0 0 1 .36.049 38.793 38.793 0 0 1 7.623 1.909c2.227.8 4.446 1.874 6.687 3.24a39.066 39.066 0 0 1 3.158 2.154c.017.013.416.32.155.117l.359.284a39.7 39.7 0 0 1 2.194 1.892 39.277 39.277 0 0 1 4.13 4.48c.311.395-.187-.246.119.154a39.046 39.046 0 0 1 3.675 5.822c.959 1.857 1.503 3.176 2.167 5.174a38.79 38.79 0 0 1 1.577 6.751c.074.522-.04-.322.026.202a39.261 39.261 0 0 1 .299 4.858c.002.888.74 1.63 1.63 1.63.887 0 1.632-.742 1.63-1.63-.022-10.763-4.348-21.185-11.96-28.795C61.705 4.229 51.172-.03 40.41 0 28.97.033 17.859 5.098 10.266 13.637 2.79 22.046-.906 33.384.19 44.584a40.681 40.681 0 0 0 6.588 18.543 40.965 40.965 0 0 0 15.744 13.908c13.088 6.527 29.153 5.388 41.184-2.926 10.877-7.517 17.48-20.057 17.578-33.269v-.195a1.645 1.645 0 0 0-1.63-1.63c-.89 0-1.627.741-1.63 1.63zM96.247 94.04s.333.419.173.19c.094.135.169.282.243.428-.136-.268.05.195.056.216.01.036.076.532.045.196.015.16.008.32 0 .478.016-.33-.035.155-.045.197-.003.016-.18.494-.056.216-.027.059-.322.538-.188.366-.383.49-.889.912-1.327 1.35l-1.818 1.818c-.164.165-.326.327-.502.479.21-.18-.218.112-.22.113-.42.24.246-.067-.207.087-.152.05-.31.08-.468.11.31-.058-.288-.018-.361-.021.33.015-.155-.035-.196-.045-.017-.004-.495-.182-.216-.057-.39-.174-.362-.172-.618-.416-.032-.03-.063-.062-.094-.094l-.661-.661-2.778-2.777-7.862-7.863-3.079-3.078c-.469-.47-.968-.923-1.402-1.426.18.208-.113-.218-.114-.22-.24-.422.067.246-.086-.208-.051-.152-.081-.31-.11-.467.062.333.013-.168.013-.202 0-.49-.075.281.016-.2.03-.158.081-.311.132-.463-.096.285.106-.18.116-.197.11-.157.122-.183.033-.078.072-.088.148-.172.228-.252.409-.429.839-.839 1.258-1.258l1.745-1.744.153-.154c.044-.044.087-.083.135-.128.348-.333-.192.109.205-.144.014-.008.483-.227.197-.115.15-.059.307-.096.463-.133.478-.113-.288.007.2-.015.107-.003.213 0 .319.007a3.44 3.44 0 0 1 .504.14c-.286-.096.179.106.197.116.41.233-.159-.17.205.143.044.038.085.08.126.12l.123.123.708.708 2.84 2.84L96.247 94.04c1.488 1.488 3.793-.817 2.305-2.305L86.298 79.481l-2.712-2.712c-.904-.904-1.803-1.72-3.11-2.03-1.708-.403-3.465.153-4.72 1.348-.43.409-.84.84-1.258 1.258l-1.745 1.745c-.923.923-1.5 2.033-1.622 3.34-.163 1.76.688 3.203 1.878 4.393l2.437 2.436 7.782 7.783 4.973 4.973c1.975 1.975 5.229 1.991 7.209.011l3.076-3.076c2.004-2.004 2.011-5.172.066-7.215-1.452-1.525-3.754.784-2.305 2.305z" xmlns="http://www.w3.org/2000/svg" />
+<path d="m76.477 77.67-8.941-8.941c-1.488-1.488-3.793.817-2.305 2.305l8.941 8.942c1.488 1.488 3.793-.818 2.305-2.305zM18.707 53.66v20.308l2.453-1.408c-4.37-2.682-8.192-6.242-11.139-10.45l.223.823V53.66l-1.63 1.63h11.723c.889 0 1.63-.741 1.63-1.63s-.741-1.63-1.63-1.63H8.614c-.889 0-1.63.742-1.63 1.63v9.154c0 .58.261 1.001.587 1.455a42.358 42.358 0 0 0 3.431 4.19c2.446 2.624 5.28 4.908 8.324 6.8l.188.116c1.061.652 2.453-.192 2.453-1.407V53.66c0-.888-.741-1.63-1.63-1.63s-1.63.742-1.63 1.63zM42.916 40.982v38.482l1.63-1.63c-3.772.37-7.58.216-11.29-.53l1.197 1.572V40.983l-1.63 1.63h11.723c.888 0 1.63-.742 1.63-1.63s-.742-1.63-1.63-1.63H32.823c-.889 0-1.63.74-1.63 1.63v37.893c0 .687.492 1.43 1.196 1.572 4 .804 8.095 1.044 12.157.647.884-.087 1.63-.676 1.63-1.63V40.983c0-.89-.742-1.63-1.63-1.63s-1.63.74-1.63 1.63z" xmlns="http://www.w3.org/2000/svg" />
+<path d="M67.125 28.306v39.387l.477-1.152a38.353 38.353 0 0 1-11.393 8.11c.818.468 1.635.938 2.453 1.407V28.306l-1.63 1.63h11.723c.889 0 1.63-.742 1.63-1.63s-.741-1.63-1.63-1.63H57.032c-.889 0-1.63.741-1.63 1.63V76.058c0 1.321 1.363 1.916 2.453 1.407 3.258-1.521 6.27-3.483 9.027-5.789a39.318 39.318 0 0 0 1.932-1.737c.632-.603 1.571-1.299 1.571-2.25V28.306c0-.889-.741-1.63-1.63-1.63s-1.63.741-1.63 1.63zM9.712 46.568l11.045-13.217 3.866-4.626-1.586.42L34.15 32.9c.538.182 1.197-.024 1.586-.42l11.842-12.047L53.41 14.5c1.474-1.5-.83-3.806-2.306-2.305L39.263 24.243l-5.833 5.933 1.586-.419-11.112-3.756c-.505-.171-1.238.002-1.586.419L11.273 39.637l-3.866 4.626c-.57.681-.67 1.635 0 2.305.586.586 1.735.683 2.305 0z" xmlns="http://www.w3.org/2000/svg" />
+<path d="m44.999 14.785 8.065-.425-1.63-1.63.093 7.437c.012.888.733 1.63 1.63 1.63.88 0 1.642-.741 1.63-1.63l-.093-7.437c-.01-.852-.734-1.677-1.63-1.63L45 11.525c-.887.047-1.63.706-1.63 1.63 0 .853.742 1.677 1.63 1.63z" xmlns="http://www.w3.org/2000/svg" />
+</g>
+<path d="m139.717 22.695 18.485 39.673h-4.227l-6.233-13.082h-17.121l-6.18 13.082H120l18.753-39.673h.963zm-.482 8.402-6.848 14.393h13.59zm28.625 24.799q1.364 0 2.34.976t.977 2.368q0 1.364-.976 2.34t-2.34.977q-1.392 0-2.355-.977t-.963-2.34q0-1.391.963-2.368t2.354-.976zm49.974-26.218-3.076 2.916q-3.317-3.264-7.263-4.95t-7.719-1.684q-4.654 0-8.868 2.3t-6.54 6.207-2.328 7.437q0 4.494 2.407 8.52t6.648 6.314 9.27 2.287q6.1 0 10.34-3.45t5.043-8.936h-12.654v-3.826h17.068q-.054 9.203-5.444 14.607t-14.486 5.404q-10.969 0-17.39-7.49-4.949-5.78-4.949-13.35 0-5.645 2.823-10.059t7.771-7.17T199.67 22q5.029 0 9.47 1.833t8.694 5.845zm13.349 26.218q1.364 0 2.34.976t.977 2.368q0 1.364-.977 2.34t-2.34.977q-1.392 0-2.355-.977t-.963-2.34q0-1.391.963-2.368t2.355-.976zm11.664-33.2h7.892q6.821 0 9.176.588 3.424.856 5.564 3.45t2.14 6.555q0 3.933-2.1 6.514t-5.792 3.465q-2.702.642-10.085.642h-2.836v18.459h-3.96V22.696zm3.959 3.853v13.484l6.741.08q4.04 0 5.926-.736t2.97-2.407 1.083-3.679q0-2.033-1.083-3.692t-2.85-2.354-5.778-.696h-7.01zm27.18 29.347q1.365 0 2.341.976t.976 2.368q0 1.364-.976 2.34t-2.34.977q-1.392 0-2.355-.977t-.963-2.34q0-1.391.963-2.368t2.354-.976zm8.427-1.445 3.371-2.033q3.558 6.554 8.213 6.554 2.006 0 3.772-.936t2.675-2.488.91-3.317q0-1.98-1.338-3.906-1.872-2.649-6.822-5.404-4.976-3.746-6.153-5.431-2.113-2.782-2.113-6.073 0-2.595 1.23-4.708t3.492-3.358 4.909-1.244q2.782 0 5.216 1.405t5.164 5.123l-3.237 2.434q-2.22-2.942-3.8-3.892t-3.45-.95q-2.381 0-3.906 1.458t-1.525 3.572q0 1.284.535 2.514t1.98 2.622q.776.776 5.136 3.986 5.137 3.799 7.05 6.287t1.912 5.457q0 4.334-3.277 7.518t-7.959 3.183q-3.638 0-6.58-1.926t-5.405-6.447zm34.27 1.445q1.364 0 2.34.976T320 59.24q0 1.364-.976 2.34t-2.341.977q-1.391 0-2.354-.977t-.964-2.34q0-1.391.964-2.368t2.354-.976zM120 74.012v-.837h4.734v.837h-1.931V81.8h-.878v-7.787H120zm5.949-.838h.866v3.617h4.39v-3.617h.862v8.624h-.861V77.64h-4.39v4.158h-.867v-8.624zm8.2 0h4.942v.85h-4.082v2.698h2.489v.837h-2.489v3.385h4.047v.854h-4.908v-8.623zm9.839 0h4.75v.85h-3.89v2.698h2.31v.849h-2.31v4.227h-.86v-8.623zm6.245 0h.861v8.624h-.86v-8.624zm2.832 8.625v-8.624h.186l5.734 6.6v-6.6h.85v8.624h-.198l-5.676-6.52v6.52h-.896zm8.863-8.625h4.943v.85h-4.083v2.698h2.49v.837h-2.49v3.385h4.048v.854h-4.908v-8.623zm12.712-.023 4.018 8.624h-.919l-1.355-2.844h-3.721l-1.344 2.844h-.965l4.076-8.624h.21zm-.105 1.826-1.489 3.129h2.955zm5.501-1.803h1.716q1.436 0 1.948.117.768.174 1.25.753t.483 1.422q0 .709-.332 1.238t-.95.806-1.073.276l2.471 4.012h-1.058l-2.472-4.012h-1.122v4.012h-.86v-8.623zm.861.844v2.93l1.483.012q.86 0 1.276-.163t.646-.523.23-.808q0-.43-.236-.786t-.614-.508-1.267-.154h-1.518zm5.1-.006v-.837h4.734v.837H188.8V81.8h-.878v-7.787h-1.925zm13.06-.989q1.955 0 3.272 1.308t1.317 3.222q0 1.89-1.314 3.105t-3.204 1.216q-1.92 0-3.24-1.311t-1.32-2.97q0-1.238.6-2.302t1.64-1.666 2.25-.602zm.036.85q-.954 0-1.812.496t-1.334 1.344-.477 1.881q0 1.535 1.061 2.489t2.562.954q1 0 1.855-.489t1.332-1.329.476-1.666q0-1.023-.476-1.855t-1.344-1.328-1.843-.498zm6.269-.699h4.75v.85h-3.89v2.698h2.309v.849h-2.309v4.227h-.86v-8.623zm17.445 1.495-.668.634q-.721-.71-1.58-1.076t-1.677-.366q-1.012 0-1.928.5t-1.421 1.349-.506 1.617q0 .976.523 1.852t1.445 1.372 2.015.497q1.326 0 2.248-.75t1.096-1.942h-2.75v-.832h3.71q-.012 2-1.184 3.175t-3.149 1.175q-2.384 0-3.78-1.628-1.076-1.256-1.076-2.902 0-1.227.614-2.187t1.69-1.558 2.43-.599q1.093 0 2.059.398t1.89 1.271zm2.181-1.495h1.716q1.436 0 1.948.117.767.174 1.25.753t.483 1.422q0 .709-.332 1.238t-.95.806-1.074.276l2.472 4.012h-1.059l-2.471-4.012h-1.122v4.012h-.861v-8.623zm.86.844v2.93l1.484.012q.86 0 1.276-.163t.645-.523.23-.808q0-.43-.235-.786t-.614-.508-1.268-.154h-1.517zm10.485-.995q1.954 0 3.272 1.308t1.317 3.222q0 1.89-1.315 3.105t-3.204 1.216q-1.919 0-3.239-1.311t-1.32-2.97q0-1.238.6-2.302t1.639-1.666 2.25-.602zm.035.85q-.953 0-1.811.496t-1.335 1.344-.477 1.881q0 1.535 1.062 2.489t2.561.954q1 0 1.855-.489t1.332-1.329.477-1.666q0-1.023-.477-1.855t-1.343-1.328-1.844-.498zm14.306.953-.686.512q-.559-.733-1.347-1.108t-1.73-.375q-1.035 0-1.913.494t-1.364 1.33-.485 1.88q0 1.576 1.081 2.539t2.728.962q1.814 0 3.03-1.419l.686.518q-.646.82-1.611 1.267t-2.152.448q-2.268 0-3.576-1.506-1.093-1.273-1.093-2.884 0-1.89 1.328-3.187T246.894 73q1.21 0 2.183.48t1.597 1.346zm1.721-1.652h4.943v.85h-4.082v2.698h2.489v.837h-2.49v3.385h4.048v.854h-4.908v-8.623zm6.688 0h1.715q1.437 0 1.948.117.768.174 1.25.753t.483 1.422q0 .709-.331 1.238t-.951.806-1.073.276l2.471 4.012h-1.058l-2.471-4.012h-1.123v4.012h-.86v-8.623zm.86.844v2.93l1.483.012q.86 0 1.277-.163t.645-.523.23-.808q0-.43-.236-.786t-.613-.508-1.268-.154h-1.518zm6.246-.844h.86v8.624h-.86v-8.624zm2.832 0h4.943v.85h-4.083v2.698h2.49v.837h-2.49v3.385h4.048v.854h-4.908v-8.623zm5.931 6.88.733-.442q.774 1.425 1.785 1.425.437 0 .82-.204t.582-.54.198-.722q0-.43-.291-.849-.407-.575-1.483-1.174-1.082-.815-1.338-1.18-.459-.606-.459-1.32 0-.565.267-1.024t.76-.73 1.066-.27q.605 0 1.134.305t1.123 1.113l-.704.53q-.482-.64-.826-.847t-.75-.206q-.517 0-.849.317t-.331.776q0 .28.116.547t.43.57q.169.168 1.117.866 1.116.826 1.532 1.367t.416 1.186q0 .942-.712 1.634t-1.73.692q-.791 0-1.431-.419t-1.175-1.401z" fill="currentColor" />
+</svg>
+<div id="header-tabs">
+<a href="./index.html" class="selected">Home</a>
+<a href="./producten.html">Producten</a>
+<a href="./about.html">Over ons</a>
+</div>
+<div id="profile-container">
+<span>SUPERMARKT NAAM</span>
+<img alt="Profiel foto" src="./assets/profile_default.png">
+</div>
+</header>
+<div id="root">
+<div id="logo-container">
+<div id="logo">
+<img alt="Profiel foto" src="./assets/profile_default.png">
+<span>SUPERMARKT NAAM</span>
+</div>
+</div>
+<div id="main-container">
+<div id="main">
+<div class="card">
+<h4>Zoek een product</h4>
+<div id="search-bar">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
+<g>
+<path fill="white" d="M353,10C161.9,10,10,161.9,10,353c0,191.1,151.9,343,343,343c84.4,0,161.1-30.1,220.5-79.6l24.5,24.5v39.8L907.3,990l82.7-82.7L680.7,598h-42.9l-23-23c50.4-59.6,81.2-136.8,81.2-222C696,161.9,544.1,10,353,10z M353,108c137.2,0,245,107.8,245,245S490.2,598,353,598S108,490.2,108,353S215.8,108,353,108z" />
+</g>
+</svg>
+<input type="text" placeholder="Product nummer">
+</div>
+<p>Voer een product nummer in om alle statistieken van dat product te krijgen. In dit prototype werkt deze functie niet.</p>
+</div>
+<div class="card">
+<h4>Aantal producten verkocht</h4>
+<em class="card-note">Laatste 10 dagen</em>
+<div class="chart-info">
+ <h1>67.3k</h1>
+<div class="positive">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+<path d="M9.005 2.408l-.697.712 4.467 4.38H1.503v1h11.272l-4.467 4.38.697.715L14.715 8l-5.71-5.592z"></path>
+</svg>
+<span>1.54%</span>
+</div>
+</div>
+<svg viewBox="0 0 50 10" class="chart">
+<defs>
+<linearGradient id="fill-gradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="var(--beige)" />
+<stop offset="60%" stop-color="white" />
+</linearGradient>
+</defs>
+<path d="M0 5 5 4 10 6 15 5 20 2 25 3 30 5 35 2 40 3 45 3 50 1H55V15H-5V2Z"></path>
+</svg>
+</div>
+<div class="card">
+<h4>Aantal klanten</h4>
+<em class="card-note">Unieke rekeningnummers &mdash; Laatste 10 dagen</em>
+<div class="chart-info">
+<h1>3.9k</h1>
+<div class="negative">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+<path d="M9.005 2.408l-.697.712 4.467 4.38H1.503v1h11.272l-4.467 4.38.697.715L14.715 8l-5.71-5.592z"></path>
+</svg>
+<span>0.93%</span>
+</div>
+</div>
+<svg viewBox="0 0 50 10" class="chart">
+<defs>
+<linearGradient id="fill-gradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="var(--beige)" />
+<stop offset="60%" stop-color="white" />
+</linearGradient>
+</defs>
+<path d="M0 5 5 3 10 4 15 4 20 5 25 6 30 4 35 4 40 3 45 6 50 7H55V15H-5V2Z"></path>
+</svg>
+</div>
+</div>
+<div id="product-leaderboard">
+<div class="card">
+<h2>Meest verkocht</h2>
+<ol>
+<li>Coca-Cola Zero sugar 4fles <em class="product-nummer">nr. 1642</em></li>
+<li>De Zaanse Hoeve Halfvolle melk <em class="product-nummer">nr. 966</em></li>
+<li>Lay's Paprika <em class="product-nummer">nr. 2873</em></li>
+<li>Blije Kip Buitenei, vrije uitloop eieren <em class="product-nummer">nr. 7643</em></li>
+<li>Eigen merk volkoren heel <em class="product-nummer">nr. 421</em></li>
+<li>Quaker Cruesli 4 noten <em class="product-nummer">nr. 3454</em></li>
+<li>McVitie's Digestive original <em class="product-nummer">nr. 76</em></li>
+<li>ERU Goudkuipje naturel <em class="product-nummer">nr. 2232</em></li>
+<li>Heineken Premium pilsener blik <em class="product-nummer">nr. 5443</em></li>
+<li>Spa Reine koolzuurvrij mineraalwater <em class="product-nummer">nr. 12</em></li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
